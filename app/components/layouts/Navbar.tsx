@@ -1,13 +1,15 @@
 "use client";
-
+import { useTranslations } from 'next-intl';
+import LocaleSwitcher from './LocaleSwitcher';
 export default function Navbar() {
+  const t = useTranslations('Navbar');
   return (
     <div className="navbar bg-base-100 shadow-md overflow-hidden">
       <div className="navbar-start">
         <a className="btn btn-ghost text-xl text-base-content">HADEX</a>
       </div>
-      
       <div className="navbar-end flex items-center gap-2">
+        <LocaleSwitcher></LocaleSwitcher>
         {/* GitHub图标链接 */}
         <a
           href="https://github.com/Kurok1/hadex"
