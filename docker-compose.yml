@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  hadex:
+    image: ghcr.io/kurok1/hadex:latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    # Optional: Mount additional volumes if needed
+    # volumes:
+    #   - ./data:/app/data
