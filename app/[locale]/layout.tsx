@@ -28,14 +28,15 @@ export function generateStaticParams() {
 type Props = {
   children: React.ReactNode;
   params: Promise<{
-    locale: Locale;
+    locale: string;
   }>;
 };
 
-
+type SupportedLocales = 'en' | 'zh';
 
 export default async function RootLayout({ children, params }: Props) {
-  const { locale } = await params;
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale as SupportedLocales; // 类型断言
   
   // 验证语言是否支持，不支持则返回404
   if (!hasLocale(routing.locales, locale)) {

@@ -56,12 +56,12 @@ const loadMessages = async (locale: string) => {
   const loadResults = await Promise.all(moduleLoadPromises);
   
   // 合并所有成功加载的模块内容
-  return loadResults.reduce((acc, result) => {
-    if (result.success) {
-      acc[result.namespace] = result.content;
-    }
-    return acc;
-  }, {});
+    return loadResults.reduce((acc, result) => {
+      if (result.success) {
+        acc[result.namespace] = result.content;
+      }
+      return acc;
+    }, {} as Record<string, any>);
 };
 
 // 验证语言代码是否有效
