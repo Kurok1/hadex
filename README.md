@@ -1,4 +1,4 @@
-Simple multi-text annotation tool bootstrapped with [Next.js](https://nextjs.org) project.
+# Simple multi-text annotation tool bootstrapped with [Next.js](https://nextjs.org) project.
 
 [中文版 README](/README-zh.md)
 

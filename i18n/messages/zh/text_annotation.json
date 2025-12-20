@@ -1,6 +1,5 @@
 {
     "uploadFile": "上传JSONL文件",
-    "exportAnnotations": "导出标注结果",
     "prevLine": "← 上一行",
     "nextLine": "下一行 →",
     "fileMD5": "文件MD5",

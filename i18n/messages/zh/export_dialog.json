@@ -1,0 +1,7 @@
+{
+    "exportAnnotations": "导出标注结果",
+    "exportFileMD5": "文件MD5值",
+    "exportAnnotationCount": "导出标签数",
+    "confirmExportDialog": "确定",
+    "exportFormat": "请选择当前导出格式"
+}
