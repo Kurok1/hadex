@@ -23,12 +23,12 @@ class FileMetadata {
 
 // 导入存储服务
 import { IStorageService } from '../services/storage';
-import { IndexedDBStorage } from '../services/indexeddb-storage';
+import { StorageFactory } from '../services/storage-factory';
 
 // 合并后的文本标注组件
 export default function TextAnnotation() {
-  // 存储服务实例 - 依赖注入模式，后续可替换为其他实现
-  const storageService: IStorageService = new IndexedDBStorage();
+  // 使用工厂模式创建存储服务实例 - 后续可通过环境变量轻松替换为其他实现
+  const storageService: IStorageService = StorageFactory.createStorage();
   // 文件上传相关
   const [jsonlData, setJsonlData] = useState<{ text: string }[]>([]);
   const [currentLine, setCurrentLine] = useState(0);
