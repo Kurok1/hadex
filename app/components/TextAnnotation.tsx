@@ -25,6 +25,9 @@ class FileMetadata {
 import { IStorageService } from '../services/storage';
 import { StorageFactory } from '../services/storage-factory';
 
+// 导入navbar组件
+import Navbar from './layouts/Navbar';
+
 // 合并后的文本标注组件
 export default function TextAnnotation() {
   // 使用工厂模式创建存储服务实例 - 后续可通过环境变量轻松替换为其他实现
@@ -332,16 +335,22 @@ export default function TextAnnotation() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen font-sans">
+    <div className="flex flex-col min-h-screen font-sans bg-base-100">
+      {/* Navbar */}
+      <Navbar />
+
       {/* 文件上传区域 */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex flex-wrap gap-2 items-center justify-between">
+      <div className="p-4 border-b border-base-300 bg-base-100 flex flex-wrap gap-4 items-center justify-between overflow-hidden">
         <div>
-          <input
-            type="file"
-            accept=".jsonl"
-            onChange={handleFileUpload}
-            className="p-2 border rounded cursor-pointer dark:border-gray-700 dark:bg-gray-800 text-sm"
-          />
+          <label className="btn btn-outline btn-primary">
+            上传JSONL文件
+            <input
+              type="file"
+              accept=".jsonl"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+          </label>
           {fileMetadata && (
             <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               <span>文件MD5: {fileMetadata.md5}</span> | <span>行数: {fileMetadata.lineCount}</span>
@@ -353,36 +362,36 @@ export default function TextAnnotation() {
         <button
           onClick={exportAnnotations}
           disabled={!fileMetadata || Object.keys(annotations).length === 0}
-          className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:bg-gray-300 cursor-pointer text-sm"
+          className="btn btn-accent"
         >
           导出标注结果
         </button>
       </div>
 
       {/* 内容展示区域 - 三栏布局：左侧(文本) - 中间(标注功能) - 右侧(标注结果) */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 overflow-hidden text-base-content">
         {/* 左侧：文本显示和选择区域 */}
-        <div className="w-1/3 p-8 border-r border-gray-200 dark:border-gray-800 flex flex-col">
+        <div className="w-1/3 p-8 border-r border-base-300 bg-base-100 flex flex-col">
           {/* 行导航按钮 */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex gap-2 mb-4 items-center">
             <button
               onClick={handlePrevLine}
               disabled={currentLine === 0}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 cursor-pointer"
+              className="btn btn-primary"
             >
               ← 上一行
             </button>
 
-            <div className="flex items-center">
-              <span className="mx-2">行 {currentLine + 1}</span>
-              <span className="text-gray-400">/</span>
-              <span className="mx-2">{fileMetadata?.lineCount || 0}</span>
+            <div className="flex items-center px-4 py-2 font-mono bg-base-200 rounded">
+              <span className="">行 {currentLine + 1}</span>
+              <span className="text-gray-400 mx-1">/</span>
+              <span className="">{fileMetadata?.lineCount || 0}</span>
             </div>
 
             <button
               onClick={handleNextLine}
               disabled={!fileMetadata || currentLine >= fileMetadata.lineCount - 1}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 cursor-pointer"
+              className="btn btn-primary"
             >
               下一行 →
             </button>
@@ -390,7 +399,7 @@ export default function TextAnnotation() {
 
           <textarea
             ref={textareaRef}
-            className="flex-1 w-full p-4 text-lg border rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-700 resize-none"
+            className="textarea textarea-accent flex-1 w-full p-4 text-lg resize-none"
             placeholder={jsonlData.length === 0 ? "请先上传jsonl文件..." : "当前行的文本将显示在这里..."}
             value={currentText}
             readOnly={jsonlData.length > 0} // 上传文件后只读
@@ -400,24 +409,26 @@ export default function TextAnnotation() {
         </div>
 
         {/* 中间：标注功能区域 */}
-        <div className="w-1/3 p-8 border-r border-gray-200 dark:border-gray-800 flex flex-col">
+        <div className="w-1/3 p-8 border-r border-base-300 bg-base-100 flex flex-col">
           {/* 共享数据信息 */}
           <div className="mb-4 text-sm text-gray-500 dark:text-gray-400">
             {fileMetadata && (
-              <div className="mb-2">
-                <div>文件 MD5: {fileMetadata.md5}</div>
-                <div>当前行号: {currentLine + 1}</div>
-                <div>当前文本: {currentText.length > 50 ? currentText.substring(0, 50) + "..." : currentText}</div>
+              <div className="card card-compact bg-base-200 p-3 rounded mb-2">
+                <div className="card-body p-0">
+                  <div>文件 MD5: {fileMetadata.md5}</div>
+                  <div>当前行号: {currentLine + 1}</div>
+                  <div>当前文本: {currentText.length > 50 ? currentText.substring(0, 50) + "..." : currentText}</div>
+                </div>
               </div>
             )}
           </div>
 
-          <h2 className="text-xl font-semibold mb-4 dark:text-white">Selected Text:</h2>
+          <h2 className="text-xl font-semibold mb-4 text-base-content">Selected Text:</h2>
 
           {/* 选中文本展示 */}
-          <div className="p-4 border rounded-lg dark:border-gray-700 dark:bg-gray-800 bg-gray-50 min-h-[200px] mb-6">
+          <div className="card bg-base-200 shadow-sm mb-6 p-4 min-h-[200px]">
             {selectedText ? (
-              <p className="dark:text-white">{selectedText}</p>
+              <p className="break-all text-base-content">{selectedText}</p>
             ) : (
               <p className="text-gray-400 dark:text-gray-500">No text selected yet</p>
             )}
@@ -425,24 +436,7 @@ export default function TextAnnotation() {
 
           {/* 标注功能区 */}
           <div className="mb-4">
-            <h3 className="text-lg font-medium mb-2 dark:text-white">标注</h3>
-
-            {/* 已有label选择 */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {Array.from(labels).map((label) => (
-                <button
-                  key={label}
-                  onClick={() => handleLabelSelect(label)}
-                  className={`px-4 py-2 rounded-full text-sm ${
-                    selectedLabel === label
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-white"
-                  } hover:bg-blue-400 cursor-pointer`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+            <h3 className="text-lg font-medium mb-3 text-base-content">标注</h3>
 
             {/* 新增label输入 */}
             <div className="flex gap-2">
@@ -451,27 +445,44 @@ export default function TextAnnotation() {
                 placeholder="输入新的label"
                 value={newLabelInput}
                 onChange={handleNewLabelInputChange}
-                className="flex-1 p-2 border rounded-lg dark:bg-gray-800 dark:text-white dark:border-gray-700"
+                className="input input-bordered flex-1"
               />
 
               <button
                 onClick={saveAnnotation}
                 disabled={!selectedText}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:bg-gray-300 cursor-pointer"
+                className="btn btn-success"
               >
                 确定标注
               </button>
+            </div>
+
+            {/* 已有label选择 */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {Array.from(labels).map((label) => (
+                <button
+                  key={label}
+                  onClick={() => handleLabelSelect(label)}
+                  className={`btn btn-sm ${
+                    selectedLabel === label
+                      ? "btn-primary"
+                      : "btn-ghost"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
         </div>
 
         {/* 右侧：标注结果展示区域 */}
-        <div className="w-1/3 p-8 flex flex-col">
-          <h2 className="text-xl font-semibold mb-4 dark:text-white">标注结果</h2>
-          <div className="flex-1 p-4 border rounded-lg dark:border-gray-700 dark:bg-gray-800 bg-gray-50 overflow-auto">
+        <div className="w-1/3 p-8 bg-base-100 flex flex-col">
+          <h2 className="text-xl font-semibold mb-4 text-base-content">标注结果</h2>
+          <div className="flex-1 card bg-base-200 shadow-sm p-4 overflow-auto">
             {annotations[currentLine] ? (
               // 只显示当前行的标注结果
-              <pre className="dark:text-white whitespace-pre-wrap">{JSON.stringify({ [currentLine]: annotations[currentLine] }, null, 2)}</pre>
+              <pre className="whitespace-pre-wrap font-mono text-sm text-base-content">{JSON.stringify({ [currentLine]: annotations[currentLine] }, null, 2)}</pre>
             ) : (
               <p className="text-gray-400 dark:text-gray-500">暂无标注</p>
             )}

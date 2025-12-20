@@ -1,4 +1,7 @@
 @import "tailwindcss";
+@plugin "daisyui"{
+  themes: light --default, synthwave;
+}
 
 :root {
   --background: #ffffff;
