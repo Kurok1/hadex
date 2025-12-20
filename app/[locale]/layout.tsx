@@ -32,11 +32,9 @@ type Props = {
   }>;
 };
 
-type SupportedLocales = 'en' | 'zh';
-
 export default async function RootLayout({ children, params }: Props) {
   const resolvedParams = await params;
-  const locale = resolvedParams.locale as SupportedLocales; // 类型断言
+  const locale = resolvedParams.locale as Locale; // 类型断言
   
   // 验证语言是否支持，不支持则返回404
   if (!hasLocale(routing.locales, locale)) {

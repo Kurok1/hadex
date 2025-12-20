@@ -1,6 +1,5 @@
 {
     "uploadFile": "Upload JSONL File",
-    "exportAnnotations": "Export Annotations",
     "prevLine": "← Previous Line",
     "nextLine": "Next Line →",
     "fileMD5": "File MD5",

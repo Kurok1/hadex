@@ -4,23 +4,7 @@ import SparkMD5 from "spark-md5";
 import { useTranslations } from 'next-intl';
 
 // 文件元数据类
-class FileMetadata {
-  private _md5: string;
-  private _lineCount: number;
-
-  constructor(md5: string, lineCount: number) {
-    this._md5 = md5;
-    this._lineCount = lineCount;
-  }
-
-  get md5(): string {
-    return this._md5;
-  }
-
-  get lineCount(): number {
-    return this._lineCount;
-  }
-}
+import { FileMetadata } from "../support/file-metadata";
 
 // 导入存储服务
 import { IStorageService } from '../services/storage';
@@ -28,6 +12,7 @@ import { StorageFactory } from '../services/storage-factory';
 
 // 导入navbar组件
 import Navbar from './layouts/Navbar';
+import { ExportDialog } from "./layouts/ExportDialog";
 
 // 合并后的文本标注组件
 export default function TextAnnotation() {
@@ -267,15 +252,6 @@ export default function TextAnnotation() {
       return;
     }
 
-    // 检查存储中是否有相关数据
-    const keys = await storageService.getAllKeys();
-    const relevantKeys = keys.filter(key => key.startsWith(`${fileMetadata.md5}_`));
-
-    if (relevantKeys.length === 0 && Object.keys(annotations).length === 0) {
-      alert(t('noAnnotationsToExport'));
-      return;
-    }
-
     // 弹出确认对话框
     const confirmExport = window.confirm(t('confirmExport'));
     if (!confirmExport) {
@@ -336,6 +312,11 @@ export default function TextAnnotation() {
     clearStorage();
   };
 
+  //清除所有的Annotations
+  const clearAllAnnotations = () => {
+    setAnnotations({});
+  }
+
   return (
     <div className="flex flex-col min-h-screen font-sans bg-base-100">
       {/* Navbar */}
@@ -361,13 +342,7 @@ export default function TextAnnotation() {
         </div>
 
         {/* 导出按钮 */}
-        <button
-          onClick={exportAnnotations}
-          disabled={!fileMetadata || Object.keys(annotations).length === 0}
-          className="btn btn-accent"
-        >
-          {t('exportAnnotations')}
-        </button>
+        <ExportDialog fileMetadata={fileMetadata} clearAnnotations={clearAllAnnotations}/>
       </div>
 
       {/* 内容展示区域 - 三栏布局：左侧(文本) - 中间(标注功能) - 右侧(标注结果) */}
@@ -385,9 +360,9 @@ export default function TextAnnotation() {
             </button>
 
             <div className="flex items-center px-4 py-2 font-mono bg-base-200 rounded">
-              <span className="">{t('currentLine')} {currentLine + 1}</span>
+              <span className="">{t('currentLine')} { fileMetadata ? currentLine + 1 : '--'}</span>
               <span className="text-gray-400 mx-1">/</span>
-              <span className="">{fileMetadata?.lineCount || 0}</span>
+              <span className="">{fileMetadata?.lineCount || '--'}</span>
             </div>
 
             <button
@@ -404,7 +379,7 @@ export default function TextAnnotation() {
             className="textarea textarea-accent flex-1 w-full p-4 text-lg resize-none"
             placeholder={jsonlData.length === 0 ? t('placeholder') : t('currentLineTextHere')}
             value={currentText}
-            readOnly={jsonlData.length > 0} // 上传文件后只读
+            readOnly={true}
             onSelect={handleTextSelect}
             onMouseUp={handleMouseUp}
           />
