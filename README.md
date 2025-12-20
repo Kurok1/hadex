@@ -20,14 +20,29 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+You can configure the application using the following environment variables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Storage Service Configuration
+| Variable Name               | Default Value      | Description                                                                 |
+|------------------------------|--------------------|-----------------------------------------------------------------------------|
+| `HADEX_STORAGE_TYPE`         | `indexeddb`        | Storage service type. Available: `indexeddb` (persistent), `memory` (non-persistent, session-only) |
+| `HADEX_DB_NAME`              | `AnnotationDB`     | IndexedDB database name (used when STORAGE_TYPE=indexeddb)                 |
+| `HADEX_STORE_NAME`           | `Annotations`      | IndexedDB object store name (used when STORAGE_TYPE=indexeddb)             |
+| `HADEX_DB_VERSION`           | `1`                | IndexedDB database version (used when STORAGE_TYPE=indexeddb)              |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Local Development
+Create a `.env.local` file in the project root to set these variables:
+
+```bash
+# Example: .env.local
+HADEX_STORAGE_TYPE=indexeddb
+HADEX_DB_NAME=MyCustomDB
+```
+
+### Docker Deployment
+You can pass environment variables directly to the `docker run` command or configure them in `docker-compose.yml`.
 
 ## Deploy on Vercel
 
@@ -80,6 +95,12 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+    # Storage service configuration environment variables
+    environment:
+      - HADEX_STORAGE_TYPE=indexeddb  # Available types: indexeddb, memory (extend as implemented)
+      - HADEX_DB_NAME=AnnotationDB      # IndexedDB database name
+      - HADEX_STORE_NAME=Annotations    # IndexedDB store name
+      - HADEX_DB_VERSION=1              # IndexedDB version
     # Optional: Mount additional volumes if needed
     # volumes:
     #   - ./data:/app/data

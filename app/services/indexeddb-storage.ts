@@ -3,9 +3,10 @@ import type { IStorageService } from './storage';
 // IndexedDB存储实现
 export class IndexedDBStorage implements IStorageService {
   private db: IDBDatabase | null = null;
-  private readonly DB_NAME = "AnnotationDB";
-  private readonly STORE_NAME = "Annotations";
-  private readonly VERSION = 1;
+  // 从环境变量读取配置，使用默认值作为回退
+  private readonly DB_NAME = process.env.HADEX_DB_NAME || "AnnotationDB";
+  private readonly STORE_NAME = process.env.HADEX_STORE_NAME || "Annotations";
+  private readonly VERSION = Number(process.env.HADEX_DB_VERSION) || 1;
 
   // 打开数据库
   private async open(): Promise<IDBDatabase> {

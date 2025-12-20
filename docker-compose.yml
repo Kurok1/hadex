@@ -6,6 +6,12 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+    # Storage service configuration environment variables
+    environment:
+      - HADEX_STORAGE_TYPE=indexeddb  # Available types: indexeddb (persistent), memory (non-persistent)
+      - HADEX_DB_NAME=AnnotationDB      # IndexedDB database name
+      - HADEX_STORE_NAME=Annotations    # IndexedDB store name
+      - HADEX_DB_VERSION=1              # IndexedDB version
     # Optional: Mount additional volumes if needed
     # volumes:
     #   - ./data:/app/data
