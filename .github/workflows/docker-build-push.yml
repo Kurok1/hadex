@@ -23,9 +23,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract tag name
+      - name: Extract tag name and prepare lowercase repository path
         id: extract_tag
-        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        run: |
+          echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          echo "LOWERCASE_REPO=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -34,5 +36,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ steps.extract_tag.outputs.TAG }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ steps.extract_tag.outputs.LOWERCASE_REPO }}:${{ steps.extract_tag.outputs.TAG }}
+            ghcr.io/${{ steps.extract_tag.outputs.LOWERCASE_REPO }}:latest
