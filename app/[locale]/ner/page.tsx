@@ -4,15 +4,15 @@ import SparkMD5 from "spark-md5";
 import { useTranslations } from 'next-intl';
 
 // 文件元数据类
-import { FileMetadata } from "../support/file-metadata";
+import { FileMetadata } from "@/app/support/file-metadata";
 
 // 导入存储服务
-import { IStorageService } from '../services/storage';
-import { StorageFactory } from '../services/storage-factory';
+import { IStorageService } from '@/app/services/storage';
+import { StorageFactory } from '@/app/services/storage-factory';
 
 // 导入navbar组件
-import Navbar from './layouts/Navbar';
-import { ExportDialog } from "./layouts/ExportDialog";
+import Navbar from '@/app/components/layouts/Navbar';
+import { ExportDialog } from "./components/ExportDialog";
 
 // 合并后的文本标注组件
 export default function TextAnnotation() {
@@ -251,73 +251,6 @@ export default function TextAnnotation() {
     setSelectedText("");
     setSelectedLabel(null);
     setNewLabelInput("");
-  };
-
-  // 导出标注结果
-  const exportAnnotations = async () => {
-    if (!fileMetadata) {
-      alert(t('pleaseUploadFile'));
-      return;
-    }
-
-    // 弹出确认对话框
-    const confirmExport = window.confirm(t('confirmExport'));
-    if (!confirmExport) {
-      return;
-    }
-
-    // 从存储中获取所有当前文件的标注结果，而不是仅本地状态
-    const getFullAnnotations = async () => {
-      try {
-        // 使用新的getWithPrefix方法获取所有相关数据
-        const prefix = `${fileMetadata.md5}_`;
-        const annotationsFromStorage = await storageService.getWithPrefix(prefix);
-
-        // 提取values并过滤掉null值
-        const validAnnotations = Object.values(annotationsFromStorage)
-          .filter(annotation => annotation !== null);
-
-        return validAnnotations;
-      } catch (error) {
-        console.error("Failed to get all annotations from storage:", error);
-        // 失败时回退到本地状态
-        return Object.values(annotations).filter(annotation => annotation !== null);
-      }
-    };
-
-    // 执行导出
-    const annotationsToExport = await getFullAnnotations();
-
-    // 合并所有标注结果为jsonl
-    const jsonlContent = annotationsToExport
-      .map(annotation => JSON.stringify(annotation))
-      .join("\n");
-
-    // 创建下载链接
-    const blob = new Blob([jsonlContent], { type: "application/jsonl" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `annotations_${fileMetadata.md5}.jsonl`; // 使用md5作为文件名一部分
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    // 清空存储中当前文件相关的所有记录
-    const clearStorage = async () => {
-      try {
-        const prefix = `${fileMetadata.md5}_`;
-        await storageService.deleteKeysWithPrefix(prefix);
-
-        // 清空本地状态中的annotations
-        setAnnotations({});
-      } catch (error) {
-        console.error("Failed to clear annotations from storage:", error);
-      }
-    };
-
-    clearStorage();
   };
 
   //清除所有的Annotations

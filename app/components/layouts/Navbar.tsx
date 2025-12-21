@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <div className="navbar bg-base-100 shadow-md overflow-hidden">
       <div className="navbar-start">
-        <a className="btn btn-ghost text-xl text-base-content">HADEX</a>
+        <a href='/' className="btn btn-ghost text-xl text-base-content">HADEX</a>
       </div>
       <div className="navbar-end flex items-center gap-2">
         <LocaleSwitcher></LocaleSwitcher>
@@ -34,7 +34,7 @@ export default function Navbar() {
         {/* 主题切换按钮 */}
         <label className="swap swap-rotate text-base-content">
           {/* this hidden checkbox controls the state */}
-          <input type="checkbox" className="theme-controller" value="synthwave" />
+          <input type="checkbox" className="theme-controller" value="dracula" />
 
           {/* sun icon */}
           <svg

@@ -1,0 +1,14 @@
+{
+    "description": "HADEX | NLP相关工具集合",
+    "ner": {
+        "title": "命名实体识别 (NER)",
+        "description": "识别文本中的命名实体，如人名、地名、组织名等"
+    },
+    "classification": {
+        "title": "文本分类",
+        "description": "将文本分类到预设的类别中"
+    },
+    "start": "立刻开始👉",
+    "chooseYourTool": "选择您需要的工具🎊 🎊 🎊",
+    "comingSoon": "即将推出😚"
+}

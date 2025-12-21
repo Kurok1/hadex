@@ -1,0 +1,14 @@
+{
+    "description": "HADEX | NLP RELATED TOOLS",
+    "ner": {
+        "title": "NER",
+        "description": "Recognite named entities in text, such as names of people, places, and organizations."
+    },
+    "classification": {
+        "title": "Text Classification",
+        "description": "Classify text into preset labels."
+    },
+    "start": "Getting Start👉",
+    "chooseYourTool": "Choose Your Tool🎊 🎊 🎊",
+    "comingSoon": "Coming Soon😚"
+}
