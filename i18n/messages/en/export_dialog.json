@@ -3,5 +3,7 @@
     "exportFileMD5": "File MD5",
     "exportAnnotationCount": "Tag count",
     "confirmExportDialog": "Please Confirm Export",
-    "exportFormat": "Current Export Format"
+    "exportFormat": "Current Export Format",
+    "noDataToExport": "No Data To Export",
+    "exportSucceed": "Success"
 }
