@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useTranslations } from 'next-intl';
+import { Toaster, toast } from 'sonner';
 // 导入存储服务
 import { IStorageService } from '../../services/storage';
 import { StorageFactory } from '../../services/storage-factory';
 import { FileMetadata } from '../../support/file-metadata';
 
-import { convertSample, jsonSample, bioSample } from '../../support/conversions';
+import { convertSample, JsonSample, BioSample } from '../../support/conversions';
 //导入dialog组件
 export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata: FileMetadata | null, clearAnnotations: Function }) => {
   const t = useTranslations('ExportDialog');
@@ -43,12 +44,18 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
   const exportAnnotations = async () => {
     const usingBio = bioFormatRef.current?.checked
     if (!fileMetadata) {
-      alert(t('pleaseUploadFile'));
+      toast.error(t('pleaseUploadFile'));
+      closeDialog()
       return;
     }
 
     // 执行导出
     let annotationsToExport = annotations;
+    if (annotationsToExport.length == 0) {
+      toast.error(t('noDataToExport'));
+      closeDialog()
+      return;
+    }
     if (usingBio) {
       //convert to bio
       annotationsToExport = annotationsToExport.map(item => {
@@ -81,12 +88,13 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
         clearAnnotations()
       } catch (error) {
         console.error("Failed to clear annotations from storage:", error);
+        return
       }
     };
 
     clearStorage();
-    if (dialogRef && dialogRef.current)
-      dialogRef.current.close()
+    closeDialog()
+    toast.success(t('exportSucceed'))
   };
 
   const openDialog = () => {
@@ -94,7 +102,11 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
       loadFullAnnotations()
       dialogRef.current.showModal()
     }
+  }
 
+  const closeDialog = () => {
+    if (dialogRef && dialogRef.current)
+      dialogRef.current.close()
   }
   return (
     <div>
@@ -106,11 +118,12 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
       >
         {t('exportAnnotations')}
       </button>
+      <Toaster position="top-center" richColors={true} />
       <dialog
         className="modal"
         ref={dialogRef}
       >
-        <div className="modal-box text-base-content">
+        <div className="modal-box text-base-content w-9/12 max-w-5xl">
           <form method="dialog">
             {/* if there is a button in form, it will close the modal */}
             <button className="btn btn-sm btn-ghost absolute right-2 top-2">✕</button>
@@ -118,22 +131,22 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
           <h3 className="font-bold text-lg">{t('exportAnnotations')}</h3>
           <p className="py-4">{t('exportFileMD5')} : {fileMetadata?.md5}</p>
           <p className="py-4">{t('exportAnnotationCount')} : {annotations.length}/{fileMetadata?.lineCount}</p>
-          <div className="modal-action">
-            <button className="btn btn-primary" onClick={exportAnnotations}>{t('confirmExportDialog')}</button>
-          </div>
+          
           <p className="py-4">{t('exportFormat')} :</p>
           <div className="tabs tabs-border">
               <input type="radio" ref={jsonFormatRef} name="export-format" className="tab" aria-label="JSON" defaultChecked />
               <div className="tab-content border-base-300 bg-base-100 p-10 whitespace-pre-wrap">
-                {JSON.stringify(jsonSample, null ,2)}
+                <JsonSample/>
               </div>
 
               <input type="radio" ref={bioFormatRef} name="export-format" className="tab" aria-label="BIO" />
               <div className="tab-content border-base-300 bg-base-100 p-10 whitespace-pre-wrap">
-                {JSON.stringify(bioSample, null ,2)}
+                <BioSample/>
               </div>
           </div>
-
+          <div className="modal-action">
+            <button className="btn btn-primary" onClick={exportAnnotations}>{t('confirmExportDialog')}</button>
+          </div>
           
         </div>
       </dialog>
