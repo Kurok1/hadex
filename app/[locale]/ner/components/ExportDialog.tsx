@@ -2,11 +2,11 @@ import { useState, useRef } from "react";
 import { useTranslations } from 'next-intl';
 import { Toaster, toast } from 'sonner';
 // 导入存储服务
-import { IStorageService } from '../../services/storage';
-import { StorageFactory } from '../../services/storage-factory';
-import { FileMetadata } from '../../support/file-metadata';
+import { IStorageService } from '@/app/services/storage';
+import { StorageFactory } from '@/app/services/storage-factory';
+import { FileMetadata } from '@/app/support/file-metadata';
 
-import { convertSample, JsonSample, BioSample } from '../../support/conversions';
+import { convertSample, JsonSample, BioSample } from '@/app/support/conversions';
 //导入dialog组件
 export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata: FileMetadata | null, clearAnnotations: Function }) => {
   const t = useTranslations('ExportDialog');

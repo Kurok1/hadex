@@ -16,6 +16,7 @@ const TRANSLATION_MODULES: readonly TranslationModuleConfig[] = [
   { namespace: 'Navbar', fileName: 'nav_bar' },
   { namespace: 'TextAnnotation', fileName: 'text_annotation' },
   { namespace: 'ExportDialog', fileName: 'export_dialog' },
+  { namespace: 'MainPage', fileName: 'main_page'},
 ];
 
 // 动态加载单个翻译模块
