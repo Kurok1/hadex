@@ -384,7 +384,7 @@ export default function TextAnnotation() {
             <div className="join">
               <div>
                 <label className="input validator join-item">
-                  <input ref={ toPageRef } disabled={!fileMetadata} placeholder={ t('inputLine') } type="number" min={1} max={fileMetadata?.lineCount + 1 || 1}/>
+                  <input ref={ toPageRef } disabled={!fileMetadata} placeholder={ t('inputLine') } type="number" min={1} max={fileMetadata ? currentLine + 1 : 1}/>
                 </label>
               </div>
               <button className="btn btn-neutral join-item" onClick={ handleToPage }>{ t('toPage') }</button>
