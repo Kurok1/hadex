@@ -21,5 +21,7 @@
     "pleaseUploadJsonlFile": "请上传jsonl格式的文件",
     "currentText": "当前文本",
     "currentLineNumber": "当前行号",
-    "currentLineTextHere": "当前行的文本将显示在这里..."
+    "currentLineTextHere": "当前行的文本将显示在这里...",
+    "toPage": "跳转",
+    "inputLine": "输入要跳转的行号..."
 }
