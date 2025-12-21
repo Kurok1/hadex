@@ -21,5 +21,7 @@
     "pleaseUploadJsonlFile": "Please upload a jsonl format file",
     "currentText": "Current Text",
     "currentLineNumber": "Current Line Number",
-    "currentLineTextHere": "The text of the current line will be displayed here..."
+    "currentLineTextHere": "The text of the current line will be displayed here...",
+    "toPage": "To Page",
+    "inputLine": "Enter Line..."
 }

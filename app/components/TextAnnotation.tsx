@@ -28,6 +28,7 @@ export default function TextAnnotation() {
   // 文本选择相关
   const [selectedText, setSelectedText] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const toPageRef = useRef<HTMLInputElement | null>(null);
 
   // 标注相关
   const [labels, setLabels] = useState<Set<string>>(new Set());
@@ -152,6 +153,13 @@ export default function TextAnnotation() {
       setCurrentLine(currentLine + 1);
     }
   };
+
+  const handleToPage = () => {
+    if (toPageRef && toPageRef.current) {
+      const value = parseInt(toPageRef.current.value)
+      setCurrentLine(value - 1)
+    }
+  }
 
   // 处理label选择
   const handleLabelSelect = (label: string) => {
@@ -360,7 +368,7 @@ export default function TextAnnotation() {
             </button>
 
             <div className="flex items-center px-4 py-2 font-mono bg-base-200 rounded">
-              <span className="">{t('currentLine')} { fileMetadata ? currentLine + 1 : '--'}</span>
+              <span className="">{ fileMetadata ? currentLine + 1 : '--'}</span>
               <span className="text-gray-400 mx-1">/</span>
               <span className="">{fileMetadata?.lineCount || '--'}</span>
             </div>
@@ -372,6 +380,16 @@ export default function TextAnnotation() {
             >
               {t('nextLine')}
             </button>
+
+            <div className="join">
+              <div>
+                <label className="input validator join-item">
+                  <input ref={ toPageRef } disabled={!fileMetadata} placeholder={ t('inputLine') } type="number" min={1} max={fileMetadata ? currentLine + 1 : 1}/>
+                </label>
+              </div>
+              <button className="btn btn-neutral join-item" onClick={ handleToPage }>{ t('toPage') }</button>
+            </div>
+
           </div>
 
           <textarea
