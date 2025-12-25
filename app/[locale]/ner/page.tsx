@@ -60,7 +60,7 @@ export default function TextAnnotation() {
       if (!fileMetadata || !jsonlData.length) return;
 
       try {
-        const key = `${fileMetadata.md5}_line_${currentLine}`;
+        const key = `ner_${fileMetadata.md5}_line_${currentLine}`;
         const savedAnnotation = await storageService.get(key);
 
         if (isMounted) {
@@ -257,7 +257,7 @@ export default function TextAnnotation() {
     // 将当前行的标注结果保存到存储
     if (fileMetadata) {
       const currentAnnotation = updatedAnnotations[currentLine];
-      const key = `${fileMetadata.md5}_line_${currentLine}`;
+      const key = `ner_${fileMetadata.md5}_line_${currentLine}`;
 
       storageService.put(key, currentAnnotation)
         .catch(error => console.error("Failed to save annotation to storage:", error));
