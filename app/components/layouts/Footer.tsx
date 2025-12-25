@@ -17,7 +17,7 @@
 export default function Footer () {
     return <footer className="h-[calc(4rem)] footer footer-center sm:footer-horizontal items-center p-4">
   <aside className="grid-flow-col items-center">
-    <p className="text-base-content">Copyright © {new Date().getFullYear()} <em>Kurok1</em>. Licensed under <a className="link link-hover" href="https://www.google.com/search?q=%E9%93%BE%E6%8E%A5"> Apache-2.0 </a></p>
+    <p className="text-base-content">Copyright © {new Date().getFullYear()} <em>Kurok1</em>. Licensed under <a className="link link-hover" href="https://www.apache.org/licenses/LICENSE-2.0"> Apache-2.0 </a></p>
   </aside>
 </footer>
 }

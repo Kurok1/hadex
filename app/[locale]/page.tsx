@@ -55,7 +55,7 @@ export default function NavigationHome({ params }: { params: Promise<{ locale: s
                       <h2 className="card-title text-xl">{t('classification.title')}</h2>
                       <p className="py-2 text-base-content">{t('classification.description')}</p>
                       <div className="card-actions justify-end mt-4">
-                        <button className="btn btn-neutral" disabled={true} >{t('comingSoon')}</button>
+                        <button className="btn btn-primary">{t('start')}</button>
                       </div>
                     </div>
                   </a>

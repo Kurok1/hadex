@@ -21,15 +21,11 @@ import { Toaster, toast } from 'sonner';
 import { IStorageService } from '@/app/services/storage';
 import { StorageFactory } from '@/app/services/storage-factory';
 import { FileMetadata } from '@/app/support/file-metadata';
-
-import { convertSample, JsonSample, BioSample } from '@/app/support/conversions';
 //导入dialog组件
 export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata: FileMetadata | null, clearAnnotations: Function }) => {
   const t = useTranslations('ExportDialog');
   const storageService: IStorageService = StorageFactory.createStorage()
   const dialogRef = useRef<HTMLDialogElement | null>(null);
-  const jsonFormatRef = useRef<HTMLInputElement | null>(null);
-  const bioFormatRef = useRef<HTMLInputElement | null>(null);
 
   const [annotations, setAnnotations] = useState<any[]>([])
 
@@ -41,7 +37,7 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
     }
     try {
       // 使用新的getWithPrefix方法获取所有相关数据
-      const prefix = `ner_${fileMetadata.md5}_`;
+      const prefix = `cif_${fileMetadata.md5}_`;
       const annotationsFromStorage = await storageService.getWithPrefix(prefix);
 
       // 提取values并过滤掉null值
@@ -58,7 +54,6 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
 
   // 导出标注结果
   const exportAnnotations = async () => {
-    const usingBio = bioFormatRef.current?.checked
     if (!fileMetadata) {
       toast.error(t('pleaseUploadFile'));
       closeDialog()
@@ -71,12 +66,6 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
       toast.error(t('noDataToExport'));
       closeDialog()
       return;
-    }
-    if (usingBio) {
-      //convert to bio
-      annotationsToExport = annotationsToExport.map(item => {
-        return convertSample(item)
-      })
     }
     // 合并所有标注结果为jsonl
     const jsonlContent = annotationsToExport
@@ -97,7 +86,7 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
     // 清空存储中当前文件相关的所有记录
     const clearStorage = async () => {
       try {
-        const prefix = `ner_${fileMetadata.md5}_`;
+        const prefix = `cif_${fileMetadata.md5}_`;
         await storageService.deleteKeysWithPrefix(prefix);
 
         // 清空本地状态中的annotations
@@ -147,19 +136,6 @@ export const ExportDialog = ({ fileMetadata, clearAnnotations }: { fileMetadata:
           <h3 className="font-bold text-lg">{t('exportAnnotations')}</h3>
           <p className="py-4">{t('exportFileMD5')} : {fileMetadata?.md5}</p>
           <p className="py-4">{t('exportAnnotationCount')} : {annotations.length}/{fileMetadata?.lineCount}</p>
-          
-          <p className="py-4">{t('exportFormat')} :</p>
-          <div className="tabs tabs-border">
-              <input type="radio" ref={jsonFormatRef} name="export-format" className="tab" aria-label="JSON" defaultChecked />
-              <div className="tab-content border-base-300 bg-base-100 p-10 whitespace-pre-wrap">
-                <JsonSample/>
-              </div>
-
-              <input type="radio" ref={bioFormatRef} name="export-format" className="tab" aria-label="BIO" />
-              <div className="tab-content border-base-300 bg-base-100 p-10 whitespace-pre-wrap">
-                <BioSample/>
-              </div>
-          </div>
           <div className="modal-action">
             <button className="btn btn-primary" onClick={exportAnnotations}>{t('confirmExportDialog')}</button>
           </div>
