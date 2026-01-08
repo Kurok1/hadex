@@ -26,13 +26,9 @@ bun dev
 ### 存储服务配置
 | Variable Name               | Default Value      | Description                                                                 |
 |------------------------------|--------------------|-----------------------------------------------------------------------------|
-| `HADEX_STORAGE_TYPE`         | `indexeddb`        | Storage service type. Available: `indexeddb` (persistent), `memory` (non-persistent, session-only) |
 | `HADEX_STORAGE_TYPE`         | `indexeddb`        | 存储服务类型。可用选项：`indexeddb`（持久化）、`memory`（非持久化，仅会话） |
-| `HADEX_DB_NAME`              | `AnnotationDB`     | IndexedDB database name (used when STORAGE_TYPE=indexeddb)                 |
 | `HADEX_DB_NAME`              | `AnnotationDB`     | IndexedDB 数据库名称（当 STORAGE_TYPE=indexeddb 时使用）                     |
-| `HADEX_STORE_NAME`           | `Annotations`      | IndexedDB object store name (used when STORAGE_TYPE=indexeddb)             |
 | `HADEX_STORE_NAME`           | `Annotations`      | IndexedDB 对象存储名称（当 STORAGE_TYPE=indexeddb 时使用）                 |
-| `HADEX_DB_VERSION`           | `1`                | IndexedDB database version (used when STORAGE_TYPE=indexeddb)              |
 | `HADEX_DB_VERSION`           | `1`                | IndexedDB 数据库版本（当 STORAGE_TYPE=indexeddb 时使用）                   |
 
 ### 本地开发
